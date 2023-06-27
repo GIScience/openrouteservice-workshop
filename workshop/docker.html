@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Setting up openrouteservice locally via docker: A step-by-step guide &#8212; openrouteservice</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'workshop/docker';</script>
+    <link rel="shortcut icon" href="../_static/openrouteservice.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Utilizing openrouteservice with R: A Disaster use case scenario" href="R.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/openrouteservice.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/openrouteservice.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/01_what.html">What is it?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/02_why.html">Why use it?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/03_how.html">How to use it?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/04_ecosystem.html">How to integrate it?</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Use cases and research</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../usecases/health_access.html">Accessibility to healthcare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/disaster_portal.html">HeiGIT Disaster Portal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/green_routing.html">Healthy Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../research/centrality.html">Network analysis - Centrality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../research/traffic_speed.html">Traffic speed modelling</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshop content</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qgis.html">QGIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="R.html">R</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Docker</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/GIScience/openrouteservice-workshop" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/GIScience/openrouteservice-workshop/issues/new?title=Issue%20on%20page%20%2Fworkshop/docker.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/workshop/docker.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Setting up openrouteservice locally via docker: A step-by-step guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-of-docker">Setup of docker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-startup-of-your-instance">Initial startup of your instance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prepare-your-pbf">Prepare your pbf</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-your-local-instance-with-an-customized-aoi">Use your local instance with an customized AOI</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-your-local-docker-instance">Use your local docker instance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alter-the-ors-config-file">Alter the ORS config file</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="setting-up-openrouteservice-locally-via-docker-a-step-by-step-guide">
+<h1>Setting up openrouteservice locally via docker: A step-by-step guide<a class="headerlink" href="#setting-up-openrouteservice-locally-via-docker-a-step-by-step-guide" title="Permalink to this headline">#</a></h1>
+<p>This document will walk you through all the necessary steps, from installing Docker on your system to configuring and customizing the OpenStreetMap (OSM) data source, enabling you to run your own local instance of OpenRouteService. By following this guide, you will gain hands-on experience in deploying and utilizing OpenRouteService for your specific routing and geospatial analysis needs.</p>
+<ul class="simple">
+<li><p>Openrouteservice github repo: <a class="reference external" href="https://github.com/GIScience/openrouteservice">github.com/GIScience/openrouteservice</a></p></li>
+<li><p>Running with docker documentation: <a class="reference external" href="https://giscience.github.io/openrouteservice/installation/Running-with-Docker.html">giscience.github.io/openrouteservice/installation/Running-with-Docker.html</a></p></li>
+<li><p>Advanced docker setup: <a class="reference external" href="https://giscience.github.io/openrouteservice/installation/Advanced-Docker-Setup">giscience.github.io/openrouteservice/installation/Advanced-Docker-Setup</a></p></li>
+<li><p>Openrouteservice wiki: <a class="reference external" href="https://github.com/GIScience/openrouteservice/wiki">github.com/GIScience/openrouteservice/wiki</a></p></li>
+</ul>
+<section id="setup-of-docker">
+<h2>Setup of docker<a class="headerlink" href="#setup-of-docker" title="Permalink to this headline">#</a></h2>
+<p>Install docker and docker-compose on your machine</p>
+<ul class="simple">
+<li><p>Linux, via apt: <a class="reference external" href="https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-to-install-Docker-and-docker-compose-on-Ubuntu">https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-to-install-Docker-and-docker-compose-on-Ubuntu</a></p></li>
+<li><p>Mac: <a class="reference external" href="https://docs.docker.com/desktop/install/mac-install/">https://docs.docker.com/desktop/install/mac-install/</a></p></li>
+<li><p>Windows: <a class="reference external" href="https://docs.docker.com/desktop/install/windows-install/">https://docs.docker.com/desktop/install/windows-install/</a></p></li>
+</ul>
+<p>You can run openrouteservice on all of the mentioned operating systems. This tutorial however is especially catered towards linux (ubuntu/debian) users. Some commands may won’t work. However every command’s action is described in order to translate it onto another OS.</p>
+<p>Download the docker-compose.yml from openrouteservice github here: <a class="reference external" href="https://github.com/GIScience/openrouteservice/blob/master/docker-compose.yml">github.com/GIScience/openrouteservice/blob/master/docker-compose.yml</a></p>
+</section>
+<section id="initial-startup-of-your-instance">
+<h2>Initial startup of your instance<a class="headerlink" href="#initial-startup-of-your-instance" title="Permalink to this headline">#</a></h2>
+<p>Make sure to create the following folders first with the command below. This is necessary to run the docker as a local user instead of a super user.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">docker</span><span class="o">/</span><span class="n">conf</span> <span class="n">docker</span><span class="o">/</span><span class="n">elevation_cache</span> <span class="n">docker</span><span class="o">/</span><span class="n">graphs</span> <span class="n">docker</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">ors</span> <span class="n">docker</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">tomcat</span>
+</pre></div>
+</div>
+<p>Start up your ors docker instance via the command:</p>
+<p>The two parameters are in place to run the container as local user instead of a super user.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">ORS_UID</span><span class="o">=</span><span class="si">${</span><span class="nv">UID</span><span class="si">}</span><span class="w"> </span><span class="nv">ORS_GID</span><span class="o">=</span><span class="si">${</span><span class="nv">GID</span><span class="si">}</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+<p>Monitor the log in your command line interface and check
+http://localhost:8080/ors/v2/health</p>
+<p>As soon as the response is healthy: ok, the graph is built and your openrouteservice instance is ready to accept requests.</p>
+<p>You can check which profiles are built behind this endpoint:
+http://localhost:8080/ors/v2/status</p>
+<p>The standard OSM dataset to be used when first starting contains Heidelberg, Germany only. Therefore now we change the data source to Kosovo.</p>
+</section>
+<section id="prepare-your-pbf">
+<h2>Prepare your pbf<a class="headerlink" href="#prepare-your-pbf" title="Permalink to this headline">#</a></h2>
+<p>Get a .pbf of Kosovo from <a class="reference external" href="https://www.geofabrik.de">geofabrik.de</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">download</span><span class="o">.</span><span class="n">geofabrik</span><span class="o">.</span><span class="n">de</span><span class="o">/</span><span class="n">europe</span><span class="o">/</span><span class="n">kosovo</span><span class="o">-</span><span class="n">latest</span><span class="o">.</span><span class="n">osm</span><span class="o">.</span><span class="n">pbf</span>
+</pre></div>
+</div>
+<p><strong>Be aware that the size of the pbf file determines the time your instance will need to startup/built the graph and how much RAM it will use while running</strong></p>
+<p>Kosovo is not too large, so on a recent computer it should not take more than 10 Minutes to startup.</p>
+<p>If the preprocessed pbf files by geofabrik don’t suit your area of interest, consider the usage of <code class="docutils literal notranslate"><span class="pre">osmium</span></code> to extract a custom region by a bounding box.</p>
+<p>More info on the software and usage:
+<a class="reference external" href="https://docs.osmcode.org/osmium/latest/index.html">docs.osmcode.org/osmium/latest/index.html</a></p>
+<p>Now, we have downloaded and prepared our kosovo pbf file.
+Next, we alter the docker compose and point it to our pbf file to load it while starting up to built te graph. Change the following lines in the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>.</p>
+<p>Line 21 from <code class="docutils literal notranslate"><span class="pre">#-</span> <span class="pre">./your_osm.pbf:/home/ors/ors-core/data/osm_file.pbf</span></code> to <code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">./kosovo-latest.osm.pbf:/home/ors/ors-core/data/osm_file.pbf</span></code></p>
+<p>Line23 from <code class="docutils literal notranslate"><span class="pre">BUILD_GRAPHS=False</span></code> to <code class="docutils literal notranslate"><span class="pre">BUILD_GRAPHS=True</span></code></p>
+</section>
+<section id="use-your-local-instance-with-an-customized-aoi">
+<h2>Use your local instance with an customized AOI<a class="headerlink" href="#use-your-local-instance-with-an-customized-aoi" title="Permalink to this headline">#</a></h2>
+<p>Great we have downloaded a custom pbf files and defined the right location in the docker-compose file. Now restart your docker:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nv">ORS_UID</span><span class="o">=</span><span class="si">${</span><span class="nv">UID</span><span class="si">}</span><span class="w"> </span><span class="nv">ORS_GID</span><span class="o">=</span><span class="si">${</span><span class="nv">GID</span><span class="si">}</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down
+<span class="nv">ORS_UID</span><span class="o">=</span><span class="si">${</span><span class="nv">UID</span><span class="si">}</span><span class="w"> </span><span class="nv">ORS_GID</span><span class="o">=</span><span class="si">${</span><span class="nv">GID</span><span class="si">}</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+<p>Again, check the logs and health status.</p>
+</section>
+<section id="use-your-local-docker-instance">
+<h2>Use your local docker instance<a class="headerlink" href="#use-your-local-docker-instance" title="Permalink to this headline">#</a></h2>
+<p>If the health and status endpoints look good, your instance ready to accept requests at <code class="docutils literal notranslate"><span class="pre">http://localhost:8080/ors/v2/</span></code>.</p>
+<p>You can now use all available clients of openrouteservice. You only have to change the configs to make requests against your local instance instead of the public one.</p>
+<ul>
+<li><p><strong>QGIS</strong>: Open the ors tools interface and click on the gear button. Provider settings appear. Go ahead and click add. Now put in a identifier for your local endpoint and its address: <code class="docutils literal notranslate"><span class="pre">http://localhost:8080/ors/v2/</span></code>. Now when you use openrouteservice tools in QGIS, you can choose between pulic and local providers</p></li>
+<li><p><strong>R</strong>: Set the endpoint with: <code class="docutils literal notranslate"><span class="pre">options(openrouteservice.url</span> <span class="pre">=</span> <span class="pre">&quot;http://localhost:8080/ors&quot;)</span></code></p></li>
+<li><p><strong>Python</strong>: Set the endpoint with: <code class="docutils literal notranslate"><span class="pre">client</span> <span class="pre">=</span> <span class="pre">openrouteservice.Client(base_url='http://localhost/ors')</span></code></p></li>
+<li><p><strong>JS</strong>: Set the endpoint with: <code class="docutils literal notranslate"><span class="pre">let</span> <span class="pre">orsDirections</span> <span class="pre">=</span> <span class="pre">new</span> <span class="pre">Openrouteservice.Directions({</span> <span class="pre">host:</span> <span class="pre">&quot;http://localhost:8082/ors&quot;</span> <span class="pre">}</span></code></p></li>
+<li><p><strong>Web client</strong>: Open the <a class="reference external" href="https://maps.openrouteservice.org">ORS web client</a>. Open the settings using the button located at the top right of the side menu. Open the ‘Advanced’ tab and in section ‘Service endpoints (URI or full URL)’ replace the field ‘Directions’ with your local one: <code class="docutils literal notranslate"><span class="pre">http://localhost:8080/ors/v2/directions</span></code>. Click ‘save’ and you are good to go!</p>
+<p><a class="reference internal" href="../_images/local_ors_webclient.png"><img alt="../_images/local_ors_webclient.png" src="../_images/local_ors_webclient.png" style="height: 300px;" /></a></img></p>
+</li>
+<li><p><strong>classic-webclient</strong>: Access the classic-webclient <a class="reference external" href="https://classic-maps.openrouteservice.org/directions?n1=49.413207&amp;n2=8.701944&amp;n3=13&amp;b=0&amp;c=0&amp;k1=en-US&amp;k2=km">here</a>. Click on the small gear button located at the top right of the left navigation bar. Again click on the very light grey gear symbol on the bottom left(hard to see, just try to hit it somewere there). Developer Options appear. Change the BaseUrl to your local one: <code class="docutils literal notranslate"><span class="pre">http://localhost:8080/ors/v2/</span></code>. Click on change Endpoints. You are good to go!</p></li>
+</ul>
+<p>You can save this config to cookies to make the change persistent when you leave the website and come back later, otherwise it will be resetted to the requests against the public API. Just tick the box next to the Change Endpoints button.</p>
+</section>
+<section id="alter-the-ors-config-file">
+<h2>Alter the ORS config file<a class="headerlink" href="#alter-the-ors-config-file" title="Permalink to this headline">#</a></h2>
+<p>By default only car profiles are activated.
+Edit the config file located at <code class="docutils literal notranslate"><span class="pre">docker/conf/ors-config.json</span></code></p>
+<p>Add “walking” in the array <code class="docutils literal notranslate"><span class="pre">active</span></code> in line 119:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;init_threads&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="s2">&quot;attribution&quot;</span><span class="p">:</span> <span class="s2">&quot;openrouteservice.org, OpenStreetMap contributors&quot;</span><span class="p">,</span>
+<span class="s2">&quot;elevation_preprocessed&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+<span class="s2">&quot;profiles&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;walking&quot;</span>
+  <span class="p">],</span>
+
+</pre></div>
+</div>
+<p>If you are interested in cycling and car profiles you can add “bike-regular” and “car” as well separated by a comma.</p>
+<p>You find a thorough documentation of the config file and its options in the wiki here <a class="github reference external" href="https://github.com/GIScience/openrouteservice/wiki/Configuration-(app.config)">GIScience/openrouteservice</a>.</p>
+<p>After you altered the config file, restart your docker instance as before when we changed the pbf file.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./workshop"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="R.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Utilizing openrouteservice with R: A Disaster use case scenario</p>
+      </div>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-of-docker">Setup of docker</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-startup-of-your-instance">Initial startup of your instance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prepare-your-pbf">Prepare your pbf</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-your-local-instance-with-an-customized-aoi">Use your local instance with an customized AOI</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-your-local-docker-instance">Use your local docker instance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alter-the-ors-config-file">Alter the ORS config file</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By HeiGIT gGmbH & GIScience Research Group, Heidelberg University
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

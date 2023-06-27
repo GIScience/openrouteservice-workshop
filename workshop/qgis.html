@@ -1,0 +1,646 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Exploring Disaster-Aware Routing with the ORS Plugin for QGIS &#8212; openrouteservice</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'workshop/qgis';</script>
+    <link rel="shortcut icon" href="../_static/openrouteservice.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utilizing openrouteservice with Python: A Disaster use case scenario" href="Python.html" />
+    <link rel="prev" title="Introduction hands-on" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/openrouteservice.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/openrouteservice.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/01_what.html">What is it?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/02_why.html">Why use it?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/03_how.html">How to use it?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/04_ecosystem.html">How to integrate it?</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Use cases and research</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../usecases/health_access.html">Accessibility to healthcare</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/disaster_portal.html">HeiGIT Disaster Portal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usecases/green_routing.html">Healthy Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../research/centrality.html">Network analysis - Centrality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../research/traffic_speed.html">Traffic speed modelling</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshop content</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">QGIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="R.html">R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/GIScience/openrouteservice-workshop" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/GIScience/openrouteservice-workshop/issues/new?title=Issue%20on%20page%20%2Fworkshop/qgis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/workshop/qgis.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Exploring Disaster-Aware Routing with the ORS Plugin for QGIS</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-routes-with-ors-tools">Single routes with ORS Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-1-creating-a-simple-route-using-the-ors-tools-plugin-in-qgis">Task 1: Creating a Simple Route using the ORS Tools Plugin in QGIS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-2-incorporating-avoid-areas-into-the-route-using-the-ors-tools-plugin-in-qgis">Task 2: Incorporating Avoid Areas into the Route using the ORS Tools Plugin in QGIS</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-routes-with-ors-tools">Multiple routes with ORS Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-3-use-a-layer-with-multiple-locations-to-create-isochrones">Task 3: Use a layer with multiple locations to create isochrones</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-4-repeat-with-avoid-damaged-infrastructure">Task 4: Repeat with avoid damaged infrastructure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-isochrones-with-ors-tools">Single Isochrones with ORS Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-5-request-single-isochrones-directly-from-the-qgis-map-canvas">Task 5: Request single isochrones directly from the QGIS map canvas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-6-isochrones-and-avoid-area">Task 6: Isochrones and  avoid area</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-isochrones-with-ors-tools">Multiple Isochrones with ORS Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-7-use-multiple-locations-to-request-isochrones-with-and-without-avoid-areas">Task 7 Use multiple locations to request isochrones with and without avoid areas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-7-postprocess-isochrones-and-join-population-counts">Task 7: Postprocess isochrones and join population counts</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="exploring-disaster-aware-routing-with-the-ors-plugin-for-qgis">
+<h1>Exploring Disaster-Aware Routing with the ORS Plugin for QGIS<a class="headerlink" href="#exploring-disaster-aware-routing-with-the-ors-plugin-for-qgis" title="Permalink to this headline">#</a></h1>
+<p>Welcome to the hands-on part of our workshop on utilizing the ORS (OpenRouteService) tool plugin for QGIS, a powerful software combination that enables direct communication between QGIS and the OpenRouteService API. In this workshop, we will guide you through the process of setting up an account on openrouteservice.org, installing the plugin, and integrating your API key. Once set up, you will have access to a range of features, including directions, isochrones, and matrix analyses, which can be seamlessly accessed through the familiar QGIS interface.</p>
+<p>While exploring the general functionality of the ORS plugin, we will specifically focus on its application in disaster-aware routing. To demonstrate its practical use, we will dive into the scenario of the devastating Ahr Valley flood that occurred in Germany in 2021. By leveraging the plugin’s capabilities, we will learn how to optimize routing decisions in the context of disaster response and recovery.</p>
+<p>By the end of this workshop, you will have gained valuable insights and practical skills in using the ORS plugin for QGIS, empowering you to make informed routing decisions and contribute to more efficient disaster management efforts. Let’s embark on this journey of exploring disaster-aware routing with the ORS plugin and QGIS!</p>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">#</a></h2>
+<p>Here is a list of resources on</p>
+<ul class="simple">
+<li><p>How to sign up for an account</p></li>
+<li><p>How to setup up the ors tools plugin</p></li>
+<li><p>How to run directions and isochrones</p></li>
+</ul>
+<p>Wiki: <a class="reference external" href="https://gitlab.gistools.geog.uni-heidelberg.de/giscience/disaster-tools/gis-in-anticipatory-humanitarian-action/-/wikis/ORSTools">https://gitlab.gistools.geog.uni-heidelberg.de/giscience/disaster-tools/gis-in-anticipatory-humanitarian-action/-/wikis/ORSTools</a></p>
+<p>PDF slides slides: <span class="xref myst">step_by_step_guide_ors_qgis_plugin.pdf</span></p>
+<p>Youtube Video tutorial: <a class="reference external" href="https://www.youtube.com/watch?v=Rsxl_0IUSFM&amp;t=12s">ORSTools 1.2 for Routing, Isochrones and Travel Time in QGIS</a></p>
+<p>Before we start with the training, make sure to download the datasets here:</p>
+<p><a class="reference external" href="https://heibox.uni-heidelberg.de/d/6a9bcec375c64839b84f/">https://heibox.uni-heidelberg.de/d/6a9bcec375c64839b84f/</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nuerburgring.gpkg</span></code> Point location of the disaster relief staging area or base camp during the emergency response.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">affected_places.gpkg</span></code> Communities affected by the flood in the Ahr valley represented as indvidual points.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">affected_municipalities.gpkg</span></code> Municipal boundaries affected by the flood in the Ahr valley represented as polygons.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">affected_roads_buff2m_WGS84.gpkg</span></code> Road and bridge infrastructure damaged or destroyed by the flood represented as polygons</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">physicians.gpkg</span></code> Physicians located in and close to the Ahr valley represented as points.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wpop_ahrvalley.tif</span></code> Population counts from WorldPop for the Ahr valley. Raster dataset.</p></li>
+</ul>
+</section>
+<section id="single-routes-with-ors-tools">
+<h2>Single routes with ORS Tools<a class="headerlink" href="#single-routes-with-ors-tools" title="Permalink to this headline">#</a></h2>
+<section id="task-1-creating-a-simple-route-using-the-ors-tools-plugin-in-qgis">
+<h3>Task 1: Creating a Simple Route using the ORS Tools Plugin in QGIS<a class="headerlink" href="#task-1-creating-a-simple-route-using-the-ors-tools-plugin-in-qgis" title="Permalink to this headline">#</a></h3>
+<p>In this first task, we will focus on creating a single, straightforward route using the ORS Tools plugin within the QGIS software. Your objective is to define an origin/source and a destination, and utilize the plugin to generate a route between these two points. To get started, you can choose Nürburgring in Germany as the source location since it served as the staging area for disaster relief during the emergency response. For the destination, you can select Bad Neuenahr-Ahrweiler, the largest city affected by the Ahr Valley flood.</p>
+<p>To accomplish this task, refer to the available resources provided above to familiarize yourself with the functionality and features of the ORS Tools plugin. Explore the plugin’s interface, study the options available, and apply the necessary settings to successfully generate the desired route. Feel free to experiment and troubleshoot any challenges you may encounter along the way.</p>
+<p>By completing this task, you will gain a solid understanding of how to leverage the ORS Tools plugin in QGIS to create simple routes, setting the foundation for more advanced applications in subsequent exercises. Good luck, and enjoy the learning process!</p>
+<p>You have two options to create directions with ORS Tools plugin. Either via the <code class="docutils literal notranslate"><span class="pre">Directions</span></code> Tool. After installing the plugin you’ll find new entries in your <em>Processing Toolbox</em> in the section <code class="docutils literal notranslate"><span class="pre">ORS</span> <span class="pre">Tools</span></code>. There you find tools on <code class="docutils literal notranslate"><span class="pre">Directions</span></code>, <code class="docutils literal notranslate"><span class="pre">Isochrones</span></code> and <code class="docutils literal notranslate"><span class="pre">Matrix</span></code>. But you can also use the ORS Tools Window, open it via the top navigation <em>Web</em> –&gt; <em>ORS Tools</em> –&gt; <em>ORS Tools</em>. There you can control your origin and destination for the route via the green plus button. You then choose the points from your QGIS map canvas. Via the apply button, a route is calculated.</p>
+</section>
+<section id="task-2-incorporating-avoid-areas-into-the-route-using-the-ors-tools-plugin-in-qgis">
+<h3>Task 2: Incorporating Avoid Areas into the Route using the ORS Tools Plugin in QGIS<a class="headerlink" href="#task-2-incorporating-avoid-areas-into-the-route-using-the-ors-tools-plugin-in-qgis" title="Permalink to this headline">#</a></h3>
+<p>In this second task, we will build upon the knowledge gained from the previous exercise and introduce the concept of avoid areas in route planning using the ORS Tools plugin in QGIS. Your objective is to repeat the workflow of creating a route between the Nürburgring and Bad Neuenahr-Ahrweiler, but this time, you will add specific areas that should be avoided along the route.</p>
+<p>To accomplish this, you will need to create a temporary polygon layer in QGIS, which will represent the avoid areas. Refer to the provided resources for detailed instructions on creating and managing temporary polygon layers. Once you have created the layer, you will adjust the corresponding parameter within the ORS Tools interface to account for the avoid areas during route calculation.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">Directions</span></code> Tool find the option of <code class="docutils literal notranslate"><span class="pre">Polygons</span> <span class="pre">to</span> <span class="pre">avoid</span></code> under <code class="docutils literal notranslate"><span class="pre">Advanced</span> <span class="pre">Parameters</span></code>. In the <em>ORS Tools</em> window you find it under <em>Advanced Configuration</em> –&gt; <em>Avoid Polygon(s)</em></p>
+<p><a class="reference internal" href="../_images/qgis_directions.png"><img alt="../_images/qgis_directions.png" src="../_images/qgis_directions.png" style="height: 400px;" /></a></img></p>
+<p>Do you spot any difference in the isochrone shapes? Try playing around and changing the shape of your avoid area.</p>
+</section>
+</section>
+<section id="multiple-routes-with-ors-tools">
+<h2>Multiple routes with ORS Tools<a class="headerlink" href="#multiple-routes-with-ors-tools" title="Permalink to this headline">#</a></h2>
+<section id="task-3-use-a-layer-with-multiple-locations-to-create-isochrones">
+<h3>Task 3: Use a layer with multiple locations to create isochrones<a class="headerlink" href="#task-3-use-a-layer-with-multiple-locations-to-create-isochrones" title="Permalink to this headline">#</a></h3>
+<p>The third task involves creating multiple directions from the disaster relief staging area to the affected communities in the Ahr Valley. With the Tool <code class="docutils literal notranslate"><span class="pre">Directions</span> <span class="pre">from</span> <span class="pre">points</span> <span class="pre">2</span> <span class="pre">layers</span></code> we can input one layer as origin/source and another layer as destinations. Make sure to enable <code class="docutils literal notranslate"><span class="pre">Row-by-Row</span></code> int the <code class="docutils literal notranslate"><span class="pre">Layer</span> <span class="pre">Mode</span></code> option to request a direction for every feature in layer1 x layer 2. The resulting directions will come in one single layer with multiple features.</p>
+<p><a class="reference internal" href="../_images/qgis_multipledirections_regular.png"><img alt="../_images/qgis_multipledirections_regular.png" src="../_images/qgis_multipledirections_regular.png" style="height: 400px;" /></a></img></p>
+</section>
+<section id="task-4-repeat-with-avoid-damaged-infrastructure">
+<h3>Task 4: Repeat with avoid damaged infrastructure<a class="headerlink" href="#task-4-repeat-with-avoid-damaged-infrastructure" title="Permalink to this headline">#</a></h3>
+<p>Okay, repeat the same procedure but set the option <code class="docutils literal notranslate"><span class="pre">Polygons</span> <span class="pre">to</span> <span class="pre">avoid</span></code> in the Advanced Parameters section. Use <code class="docutils literal notranslate"><span class="pre">affected_roads_buff2m_WGS84.gpkg</span></code> as input.</p>
+<p>You will experience some errors during processing like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Route</span> <span class="kn">from</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">24</span> <span class="n">caused</span> <span class="n">a</span> <span class="n">ApiError</span><span class="p">:</span>
+<span class="mi">404</span> <span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span><span class="mi">2009</span><span class="p">,</span><span class="s2">&quot;message&quot;</span><span class="p">:</span><span class="s2">&quot;Route could not be found - Unable to find a route between points 1 (6.9443150 50.3316480) and 2 (6.9730780 50.4900070).&quot;</span><span class="p">},</span><span class="s2">&quot;info&quot;</span><span class="p">:{</span><span class="s2">&quot;engine&quot;</span><span class="p">:{</span><span class="s2">&quot;version&quot;</span><span class="p">:</span><span class="s2">&quot;6.8.1&quot;</span><span class="p">,</span><span class="s2">&quot;build_date&quot;</span><span class="p">:</span><span class="s2">&quot;2023-02-27T01:00:29Z&quot;</span><span class="p">},</span><span class="s2">&quot;timestamp&quot;</span><span class="p">:</span><span class="mi">1687768940091</span><span class="p">}})</span>
+</pre></div>
+</div>
+<p>This is due to some communities are not reachable taken into account the damaged infrastructure. Can you list all the communities not reachable by road? The error message provides you with the index of the location, but you can of course also just verify it directly in your QGIS map view.</p>
+<p><a class="reference internal" href="../_images/qgis_multipledirections_avoid.png"><img alt="../_images/qgis_multipledirections_avoid.png" src="../_images/qgis_multipledirections_avoid.png" style="height: 400px;" /></a></img></p>
+</section>
+</section>
+<section id="single-isochrones-with-ors-tools">
+<h2>Single Isochrones with ORS Tools<a class="headerlink" href="#single-isochrones-with-ors-tools" title="Permalink to this headline">#</a></h2>
+<p>Now we will kinda repeat the workflow above but for isochrones within QGIS. We start with single isochrone requests and later do multiple.</p>
+<section id="task-5-request-single-isochrones-directly-from-the-qgis-map-canvas">
+<h3>Task 5: Request single isochrones directly from the QGIS map canvas<a class="headerlink" href="#task-5-request-single-isochrones-directly-from-the-qgis-map-canvas" title="Permalink to this headline">#</a></h3>
+<p>Find the QGIS Tool <code class="docutils literal notranslate"><span class="pre">Isochrones</span> <span class="pre">from</span> <span class="pre">point</span></code> in your processing toolbox under <em>ORS Tools</em> –&gt; <em>Isochrones</em>. For the option <code class="docutils literal notranslate"><span class="pre">Input</span> <span class="pre">Point</span> <span class="pre">from</span> <span class="pre">map</span> <span class="pre">canvas</span></code> click the three dots on the right, then choose a location on the QGIS map canvas. This will be the location the isochrone will be calculated from. Choose range and intervals, then hit run.</p>
+<p><a class="reference internal" href="../_images/qgis_singleisochrone_regular.png"><img alt="../_images/qgis_singleisochrone_regular.png" src="../_images/qgis_singleisochrone_regular.png" style="height: 400px;" /></a></img></p>
+</section>
+<section id="task-6-isochrones-and-avoid-area">
+<h3>Task 6: Isochrones and  avoid area<a class="headerlink" href="#task-6-isochrones-and-avoid-area" title="Permalink to this headline">#</a></h3>
+<p>Repeat the same procedure but like in task 4 add the damaged road infrastructure as avoid polygons.</p>
+<p><a class="reference internal" href="../_images/qgis_singleisochrone_avoid.png"><img alt="../_images/qgis_singleisochrone_avoid.png" src="../_images/qgis_singleisochrone_avoid.png" style="height: 400px;" /></a></img></p>
+<p>How would you describe the difference of both isochrones?</p>
+</section>
+</section>
+<section id="multiple-isochrones-with-ors-tools">
+<h2>Multiple Isochrones with ORS Tools<a class="headerlink" href="#multiple-isochrones-with-ors-tools" title="Permalink to this headline">#</a></h2>
+<p>In this second part we create isochrones from locations of physicians in the Ahr Valley, considering both regular isochrones and isochrones that account for blocked roads and damaged bridges due to infrastructure damage.</p>
+<section id="task-7-use-multiple-locations-to-request-isochrones-with-and-without-avoid-areas">
+<h3>Task 7 Use multiple locations to request isochrones with and without avoid areas<a class="headerlink" href="#task-7-use-multiple-locations-to-request-isochrones-with-and-without-avoid-areas" title="Permalink to this headline">#</a></h3>
+<p>Choose the <code class="docutils literal notranslate"><span class="pre">Isochrones</span> <span class="pre">from</span> <span class="pre">layer</span></code> Tool, it is located in your processing toolbox under <em>ORS Tools</em> –&gt; <em>Isochrones</em>. Instead of a single location from the map canvas, we can use a point layer open in QGIS as input. Choose the dataset <code class="docutils literal notranslate"><span class="pre">physicians.gpkg</span></code>. We will create isochrones for all physicians located in or close to the Ahr valley. For the range choose a maximum range of 30 and intervals of 5: <code class="docutils literal notranslate"><span class="pre">5,10,15,20,25,30</span></code>. Hit run.</p>
+<p><a class="reference internal" href="../_images/qgis_multipleisochrone_regular.png"><img alt="../_images/qgis_multipleisochrone_regular.png" src="../_images/qgis_multipleisochrone_regular.png" style="height: 400px;" /></a></img></p>
+<p>Repeat the same procedure but like before with the option polygons to avoid set to the damaged infrastructure dataset.</p>
+<p><a class="reference internal" href="../_images/qgis_multipleisochrone_regular.png"><img alt="../_images/qgis_multipleisochrone_regular.png" src="../_images/qgis_multipleisochrone_regular.png" style="height: 400px;" /></a></img></p>
+<p>As you examine the two isochrone datasets, take a closer look for any discernible patterns. When comparing these isochrones to the damaged infrastructure, pay attention to which segments of the infrastructure appear to have the greatest impact. By identifying and analyzing these areas on the map, you can gain valuable insights into the critical infrastructure segments that are likely to significantly affect healthcare accessibility. These observations will enable you to make informed decisions and prioritize the restoration of infrastructure in the Ahr Valley accordingly.</p>
+</section>
+<section id="task-7-postprocess-isochrones-and-join-population-counts">
+<h3>Task 7: Postprocess isochrones and join population counts<a class="headerlink" href="#task-7-postprocess-isochrones-and-join-population-counts" title="Permalink to this headline">#</a></h3>
+<p>This final task will guide you through the postprocessing of the isochrones in QGIS using core functionalities.</p>
+<p>The objective is to gain insights into the number of people residing in the affected municipalities who can reach a physician within a 15-minute motorized travel time, considering both the damaged infrastructure and the unaffected travel conditions.</p>
+<p>To avoid confusion, make sure to differentiate between the two isochrone datasets by assigning them distinct names, such as <code class="docutils literal notranslate"><span class="pre">isochrones_regular</span></code> and <code class="docutils literal notranslate"><span class="pre">isochrones_avoid</span></code>.</p>
+<p>Begin by performing an intersection between the isochrone layer and the municipalities. Utilize the <code class="docutils literal notranslate"><span class="pre">Intersection</span></code> tool in the vector processing toolbox. This step will provide information on which isochrones intersect with each municipality.</p>
+<p>Next, dissolve the output to create continuous polygons representing travel time and municipalities. Use the <code class="docutils literal notranslate"><span class="pre">Dissolve</span></code> tool in the vector processing toolbox, specifying <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">AA_Mins</span></code> as the attributes for the dissolve operation. The result will generate geometries that indicate the extent of travel time for each municipality. For instance, you can determine the area within the Municipality of <em>Altenahr</em> where residents can access a physician within 15 minutes or less.</p>
+<p>To enrich the polygons with population counts, load the dataset on population distribution, <code class="docutils literal notranslate"><span class="pre">wpop_ahrvalley.tif</span></code>. Select the <code class="docutils literal notranslate"><span class="pre">Zonal</span> <span class="pre">statistic</span></code> tool from the processing toolbox. Set the dissolved layer as the input and <code class="docutils literal notranslate"><span class="pre">wpop_ahrvalley</span></code> as the raster layer. Adjust the statistics calculation to only include the sum of cell values within the zones defined by the dissolved isochrone polygons.</p>
+<p>The result will be a comprehensive table displaying population counts for each combination of isochrone travel time and municipality. For visualization purposes, you can extract polygons based on a specific travel time value (e.g., <code class="docutils literal notranslate"><span class="pre">15</span></code>) and join them back to the <code class="docutils literal notranslate"><span class="pre">affected_municipalities</span></code> layer using the <code class="docutils literal notranslate"><span class="pre">id</span></code> field. This allows you to visualize the polygons with the added attribute of population counts.</p>
+<p>Here is an example illustrating the population residing within a 15-minute or less travel time range in each municipality.</p>
+<p><a class="reference internal" href="../_images/qgis_multipleisochrones_regular_join.png"><img alt="../_images/qgis_multipleisochrones_regular_join.png" src="../_images/qgis_multipleisochrones_regular_join.png" style="height: 400px;" /></a></img></p>
+<p><a class="reference internal" href="../_images/qgis_multipleisochrones_avoid_join.png"><img alt="../_images/qgis_multipleisochrones_avoid_join.png" src="../_images/qgis_multipleisochrones_avoid_join.png" style="height: 400px;" /></a></img></p>
+<p>The grey municipalities inhabitants live outside the range of 15 minutes. May you try it with a higher threshold like 30 minutes an see for changes on municipality level.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./workshop"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction hands-on</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Python.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Utilizing openrouteservice with Python: A Disaster use case scenario</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-routes-with-ors-tools">Single routes with ORS Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-1-creating-a-simple-route-using-the-ors-tools-plugin-in-qgis">Task 1: Creating a Simple Route using the ORS Tools Plugin in QGIS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-2-incorporating-avoid-areas-into-the-route-using-the-ors-tools-plugin-in-qgis">Task 2: Incorporating Avoid Areas into the Route using the ORS Tools Plugin in QGIS</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-routes-with-ors-tools">Multiple routes with ORS Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-3-use-a-layer-with-multiple-locations-to-create-isochrones">Task 3: Use a layer with multiple locations to create isochrones</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-4-repeat-with-avoid-damaged-infrastructure">Task 4: Repeat with avoid damaged infrastructure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-isochrones-with-ors-tools">Single Isochrones with ORS Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-5-request-single-isochrones-directly-from-the-qgis-map-canvas">Task 5: Request single isochrones directly from the QGIS map canvas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-6-isochrones-and-avoid-area">Task 6: Isochrones and  avoid area</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-isochrones-with-ors-tools">Multiple Isochrones with ORS Tools</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-7-use-multiple-locations-to-request-isochrones-with-and-without-avoid-areas">Task 7 Use multiple locations to request isochrones with and without avoid areas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-7-postprocess-isochrones-and-join-population-counts">Task 7: Postprocess isochrones and join population counts</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By HeiGIT gGmbH & GIScience Research Group, Heidelberg University
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
